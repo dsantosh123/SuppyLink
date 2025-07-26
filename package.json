@@ -1,0 +1,27 @@
+{
+  "name": "supplylink-project",
+  "version": "1.0.0",
+  "description": "Raw Material Distribution Platform for Street Vendors and Local Suppliers",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "supplylink",
+    "raw-materials",
+    "vendor",
+    "supplier",
+    "marketplace",
+    "node.js",
+    "express",
+    "firestore"
+  ],
+  "author": "Your Name/Organization",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.0"
+  }
+}
