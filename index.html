@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupplyLink - Raw Material Distribution Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader">
+            <div class="logo-container">
+                <i class="fas fa-truck-moving"></i>
+                <h1>SupplyLink</h1>
+            </div>
+            <div class="loading-text">
+                <p>Connecting vendors with local suppliers...</p>
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-section hidden">
+        <div class="auth-background">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <div class="logo">
+                        <i class="fas fa-link"></i>
+                        <h1>SupplyLink</h1>
+                    </div>
+                    <p class="tagline">Bridging street vendors with local suppliers</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                    <button class="tab-btn" data-tab="register">
+                        <i class="fas fa-user-plus"></i>
+                        Register
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form active">
+                    <h3>Welcome Back!</h3>
+                    <form id="loginFormElement">
+                        <div class="input-group">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="loginPhone" placeholder="Mobile Number" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                        </div>
+                        <div class="role-selector">
+                            <h4>Login as:</h4>
+                            <div class="role-options">
+                                <label class="role-option">
+                                    <input type="radio" name="loginRole" value="vendor" checked>
+                                    <div class="role-card">
+                                        <i class="fas fa-store"></i>
+                                        <span>Street Vendor</span>
+                                        <p>Buy raw materials</p>
+                                    </div>
+                                </label>
+                                <label class="role-option">
+                                    <input type="radio" name="loginRole" value="supplier">
+                                    <div class="role-card">
+                                        <i class="fas fa-truck"></i>
+                                        <span>Supplier</span>
+                                        <p>Sell raw materials</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-btn primary">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to Dashboard
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form">
+                    <h3>Join SupplyLink Today</h3>
+                    <form id="registerFormElement">
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="registerName" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="registerPhone" placeholder="Mobile Number" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="registerAddress" placeholder="Business Address" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="registerPassword" placeholder="Create Password" required>
+                        </div>
+                        <div class="role-selector">
+                            <h4>Register as:</h4>
+                            <div class="role-options">
+                                <label class="role-option">
+                                    <input type="radio" name="registerRole" value="vendor" checked>
+                                    <div class="role-card">
+                                        <i class="fas fa-store"></i>
+                                        <span>Street Vendor</span>
+                                        <p>Find suppliers nearby</p>
+                                    </div>
+                                </label>
+                                <label class="role-option">
+                                    <input type="radio" name="registerRole" value="supplier">
+                                    <div class="role-card">
+                                        <i class="fas fa-truck"></i>
+                                        <span>Supplier</span>
+                                        <p>Connect with vendors</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-btn primary">
+                            <i class="fas fa-user-plus"></i>
+                            Create Account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor Dashboard -->
+    <div id="vendorDashboard" class="dashboard hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo-small">
+                    <i class="fas fa-link"></i>
+                    <span>SupplyLink</span>
+                </div>
+                <h1><i class="fas fa-store"></i> Vendor Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <button class="header-btn" id="getLocationBtn">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="locationText">Detect Location</span>
+                </button>
+                <button class="header-btn" id="vendorProfile">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <button class="header-btn logout" id="vendorLogout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="dashboard-nav">
+            <button class="nav-btn active" data-section="discover">
+                <i class="fas fa-search"></i>
+                <span>Discover Suppliers</span>
+            </button>
+            <button class="nav-btn" data-section="orders">
+                <i class="fas fa-shopping-cart"></i>
+                <span>My Orders</span>
+                <span class="badge" id="ordersBadge">0</span>
+            </button>
+            <button class="nav-btn" data-section="history">
+                <i class="fas fa-history"></i>
+                <span>Order History</span>
+            </button>
+            <button class="nav-btn" data-section="credit">
+                <i class="fas fa-credit-card"></i>
+                <span>Credit Tracker</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Discover Suppliers Section -->
+            <section id="discoverSection" class="dashboard-section active">
+                <div class="section-header">
+                    <h2>Discover Nearby Suppliers</h2>
+                    <p>Find the best deals on raw materials within 3km radius</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters-container">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchItems" placeholder="Search for onions, tomatoes, potatoes...">
+                    </div>
+                    <div class="filter-controls">
+                        <select id="sortBy" class="filter-select">
+                            <option value="distance">Sort by Distance</option>
+                            <option value="price">Sort by Price</option>
+                            <option value="rating">Sort by Rating</option>
+                        </select>
+                        <select id="radiusFilter" class="filter-select">
+                            <option value="1">Within 1 km</option>
+                            <option value="2">Within 2 km</option>
+                            <option value="3" selected>Within 3 km</option>
+                            <option value="5">Within 5 km</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Suppliers Grid -->
+                <div id="suppliersList" class="suppliers-grid">
+                    <!-- Suppliers will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- My Orders Section -->
+            <section id="ordersSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>My Current Orders</h2>
+                    <p>Track your active orders and deliveries</p>
+                </div>
+                
+                <div class="orders-container">
+                    <!-- Orders will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Order History Section -->
+            <section id="historySection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Order History</h2>
+                    <p>View your past orders and transactions</p>
+                </div>
+                
+                <div class="history-filters">
+                    <select id="historyFilter" class="filter-select">
+                        <option value="all">All Orders</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <div class="date-range">
+                        <input type="date" id="fromDate" class="date-input">
+                        <span>to</span>
+                        <input type="date" id="toDate" class="date-input">
+                    </div>
+                </div>
+
+                <div class="history-container">
+                    <!-- Order history will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Credit Tracker Section -->
+            <section id="creditSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Credit Tracker</h2>
+                    <p>Manage your credit purchases and payments</p>
+                </div>
+                
+                <div class="credit-summary">
+                    <div class="credit-card total">
+                        <div class="credit-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="credit-info">
+                            <h3>Total Outstanding</h3>
+                            <p class="credit-amount">₹0</p>
+                            <small>Across 0 suppliers</small>
+                        </div>
+                    </div>
+                    <div class="credit-card monthly">
+                        <div class="credit-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="credit-info">
+                            <h3>This Month</h3>
+                            <p class="credit-amount">₹0</p>
+                            <small>0 credit purchases</small>
+                        </div>
+                    </div>
+                    <div class="credit-card due">
+                        <div class="credit-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="credit-info">
+                            <h3>Due This Week</h3>
+                            <p class="credit-amount">₹0</p>
+                            <small>No payments due</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="credit-transactions">
+                    <h3>Recent Credit Transactions</h3>
+                    <div class="transaction-list">
+                        <!-- Transactions will be rendered here by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Supplier Dashboard -->
+    <div id="supplierDashboard" class="dashboard hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo-small">
+                    <i class="fas fa-link"></i>
+                    <span>SupplyLink</span>
+                </div>
+                <h1><i class="fas fa-truck"></i> Supplier Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <button class="header-btn notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">0</span>
+                </button>
+                <button class="header-btn" id="supplierProfile">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <button class="header-btn logout" id="supplierLogout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="dashboard-nav">
+            <button class="nav-btn active" data-section="inventory">
+                <i class="fas fa-boxes"></i>
+                <span>Inventory</span>
+            </button>
+            <button class="nav-btn" data-section="incoming">
+                <i class="fas fa-inbox"></i>
+                <span>Orders</span>
+                <span class="badge" id="incomingBadge">0</span>
+            </button>
+            <button class="nav-btn" data-section="sales">
+                <i class="fas fa-chart-line"></i>
+                <span>Sales</span>
+            </button>
+            <button class="nav-btn" data-section="ratings">
+                <i class="fas fa-star"></i>
+                <span>Ratings</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Inventory Section -->
+            <section id="inventorySection" class="dashboard-section active">
+                <div class="section-header">
+                    <h2>Daily Inventory Management</h2>
+                    <p>Manage your available stock and pricing</p>
+                    <button class="btn primary" id="addInventoryBtn">
+                        <i class="fas fa-plus"></i>
+                        Add New Item
+                    </button>
+                </div>
+                
+                <div class="inventory-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Total Items</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Low Stock</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Out of Stock</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="inventoryGrid" class="inventory-grid">
+                    <!-- Inventory items will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Incoming Orders Section -->
+            <section id="incomingSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Incoming Orders</h2>
+                    <p>Manage order requests from vendors</p>
+                </div>
+                
+                <div class="orders-filter">
+                    <button class="filter-btn active" data-status="pending">
+                        <i class="fas fa-clock"></i>
+                        Pending (<span id="pendingOrdersCount">0</span>)
+                    </button>
+                    <button class="filter-btn" data-status="confirmed">
+                        <i class="fas fa-check"></i>
+                        Confirmed (<span id="confirmedOrdersCount">0</span>)
+                    </button>
+                    <button class="filter-btn" data-status="delivered">
+                        <i class="fas fa-truck"></i>
+                        Delivered (<span id="deliveredOrdersCount">0</span>)
+                    </button>
+                </div>
+
+                <div id="incomingOrdersContainer" class="incoming-orders">
+                    <!-- Incoming orders will be rendered here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Sales Section -->
+            <section id="salesSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Sales Analytics</h2>
+                    <p>Track your business performance</p>
+                </div>
+                
+                <div class="sales-summary">
+                    <div class="sales-card today">
+                        <div class="sales-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="sales-info">
+                            <h3>Today's Sales</h3>
+                            <p class="sales-amount">₹0</p>
+                            <small class="growth positive">--</small>
+                        </div>
+                    </div>
+                    <div class="sales-card week">
+                        <div class="sales-icon">
+                            <i class="fas fa-calendar-week"></i>
+                        </div>
+                        <div class="sales-info">
+                            <h3>This Week</h3>
+                            <p class="sales-amount">₹0</p>
+                            <small class="growth positive">--</small>
+                        </div>
+                    </div>
+                    <div class="sales-card month">
+                        <div class="sales-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="sales-info">
+                            <h3>This Month</h3>
+                            <p class="sales-amount">₹0</p>
+                            <small class="growth negative">--</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sales-details">
+                    <div class="chart-container">
+                        <h3>Sales Trend (Last 7 Days)</h3>
+                        <div class="chart-placeholder">
+                            <div class="chart-bars">
+                                <!-- Chart bars will be rendered here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="top-items">
+                        <h3>Top Selling Items</h3>
+                        <div class="item-list">
+                            <!-- Top items will be rendered here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ratings Section -->
+            <section id="ratingsSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Customer Ratings & Reviews</h2>
+                    <p>Monitor your service quality</p>
+                </div>
+                
+                <div class="rating-overview">
+                    <div class="rating-summary">
+                        <div class="overall-rating">
+                            <h3>Overall Rating</h3>
+                            <div class="rating-display">
+                                <span class="rating-number">0.0</span>
+                                <div class="rating-stars">
+                                    <!-- Stars generated by JavaScript -->
+                                </div>
+                            </div>
+                            <p>Based on 0 reviews</p>
+                        </div>
+                        
+                        <div class="rating-breakdown">
+                            <!-- Rating breakdown bars will be rendered by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-reviews">
+                    <h3>Recent Reviews</h3>
+                    <div class="review-list">
+                        <!-- Reviews will be rendered here by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Inventory Modal -->
+    <div id="inventoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="inventoryModalTitle">Add Inventory Item</h3>
+                <button class="close-btn" id="closeInventoryModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="inventoryForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemName">Item Name *</label>
+                            <input type="text" id="itemName" placeholder="e.g., Onions, Tomatoes" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemUnit">Unit *</label>
+                            <select id="itemUnit" required>
+                                <option value="">Select Unit</option>
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="dozen">Dozen</option>
+                                <option value="packet">Packet</option>
+                                <option value="liter">Liter</option>
+                                <option value="piece">Piece</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemPrice">Price per Unit (₹) *</label>
+                            <input type="number" id="itemPrice" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemQuantity">Available Quantity *</label>
+                            <input type="number" id="itemQuantity" placeholder="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemDescription">Description (Optional)</label>
+                        <textarea id="itemDescription" placeholder="Additional details about the item..."></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn secondary" id="cancelInventory">Cancel</button>
+                        <button type="submit" class="btn primary">Save Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rate Your Experience</h3>
+                <button class="close-btn" id="closeRatingModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="supplier-info">
+                    <h4 id="ratingSupplierName">Fresh Mart Supplies</h4>
+                    <p id="ratingOrderInfo">Order #SL000 • Yesterday</p>
+                </div>
+                <div class="rating-input">
+                    <p>How was your experience with this supplier?</p>
+                    <div class="star-rating" id="starRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                </div>
+                <div class="review-categories">
+                    <h4>Rate specific aspects:</h4>
+                    <div class="category-rating">
+                        <span>Quality of products:</span>
+                        <div class="mini-stars" data-category="quality">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="category-rating">
+                        <span>Delivery time:</span>
+                        <div class="mini-stars" data-category="delivery">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="category-rating">
+                        <span>Communication:</span>
+                        <div class="mini-stars" data-category="communication">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-input">
+                    <label for="reviewText">Share your experience (Optional)</label>
+                    <textarea id="reviewText" placeholder="Tell other vendors about your experience..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" id="cancelRating">Skip</button>
+                    <button type="button" class="btn primary" id="submitRating">Submit Rating</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supplier Details Modal (for Vendor to view supplier info) -->
+    <div id="supplierDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="supplierDetailName">Supplier Name</h3>
+                <button class="close-btn" id="closeSupplierDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="supplier-detail-overview">
+                    <p class="supplier-detail-address"><i class="fas fa-map-marker-alt"></i> Loading Address...</p>
+                    <p class="supplier-detail-contact"><i class="fas fa-phone"></i> Loading Contact...</p>
+                    <div class="supplier-detail-rating">
+                        <div class="rating-stars" id="supplierDetailStars">
+                            <!-- Stars generated by JS -->
+                        </div>
+                        <span class="rating-number" id="supplierDetailRatingNumber">0.0</span>
+                        <span class="total-reviews" id="supplierDetailTotalReviews">(0 reviews)</span>
+                    </div>
+                    <p class="supplier-detail-delivery"><i class="fas fa-clock"></i> Avg. Delivery: <span id="supplierDetailDeliveryTime">--</span> min</p>
+                </div>
+
+                <div class="supplier-detail-inventory">
+                    <h4>Available Items</h4>
+                    <div class="item-list" id="supplierDetailItemList">
+                        <!-- Items will be loaded here by JS -->
+                        <p class="no-data-message">No items available from this supplier.</p>
+                    </div>
+                </div>
+
+                <div class="supplier-detail-reviews">
+                    <h4>Recent Reviews</h4>
+                    <div class="review-list" id="supplierDetailReviewList">
+                        <!-- Reviews will be loaded here by JS -->
+                        <p class="no-data-message">No recent reviews for this supplier.</p>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn primary" id="orderFromDetailsBtn">
+                        <i class="fas fa-shopping-cart"></i> Order from this Supplier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Vendor Profile Modal -->
+    <div id="vendorProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Your Vendor Profile</h3>
+                <button class="close-btn" id="closeVendorProfileModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-info-display">
+                    <p><strong>Name:</strong> <span id="vendorProfileName"></span></p>
+                    <p><strong>Mobile:</strong> <span id="vendorProfilePhone"></span></p>
+                    <p><strong>Address:</strong> <span id="vendorProfileAddress"></span></p>
+                    <p><strong>Role:</strong> <span id="vendorProfileRole"></span></p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" id="editVendorProfileBtn">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Supplier Profile Modal -->
+    <div id="supplierProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Your Supplier Profile</h3>
+                <button class="close-btn" id="closeSupplierProfileModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-info-display">
+                    <p><strong>Name:</strong> <span id="supplierProfileName"></span></p>
+                    <p><strong>Mobile:</strong> <span id="supplierProfilePhone"></span></p>
+                    <p><strong>Address:</strong> <span id="supplierProfileAddress"></span></p>
+                    <p><strong>Role:</strong> <span id="supplierProfileRole"></span></p>
+                    <p><strong>Rating:</strong> <span id="supplierProfileRating"></span> (<span id="supplierProfileTotalReviews"></span> reviews)</p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" id="editSupplierProfileBtn">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Order Placement Modal -->
+    <div id="orderPlacementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Place Order from <span id="orderModalSupplierName"></span></h3>
+                <button class="close-btn" id="closeOrderPlacementModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Supplier Address:</strong> <span id="orderModalSupplierAddress"></span></p>
+                <p><strong>Delivery Time:</strong> <span id="orderModalDeliveryTime"></span> min</p>
+
+                <h4>Select Items:</h4>
+                <div class="order-items-selection" id="orderItemsSelection">
+                    <!-- Items from supplier's inventory will be loaded here by JS -->
+                    <p class="no-data-message">No items available for ordering.</p>
+                </div>
+
+                <div class="order-summary-display">
+                    <p>Subtotal: ₹<span id="orderSubtotal">0.00</span></p>
+                    <p>Delivery Fee: ₹<span id="orderDeliveryFee">20.00</span></p>
+                    <h3>Total: ₹<span id="orderTotal">0.00</span></h3>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                        <option value="Credit">Credit (Pay Later)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="specialNotes">Special Notes (Optional)</label>
+                    <textarea id="specialNotes" placeholder="Any specific instructions for the supplier?"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" id="cancelOrderPlacement">Cancel</button>
+                    <button type="button" class="btn primary" id="submitOrderBtn">
+                        <i class="fas fa-shopping-cart"></i> Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Notifications Modal (for Supplier) -->
+    <div id="notificationsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Notifications</h3>
+                <button class="close-btn" id="closeNotificationsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="notification-list" id="notificationList">
+                    <!-- Notifications will be loaded here by JS -->
+                    <p class="no-data-message">No new notifications.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
